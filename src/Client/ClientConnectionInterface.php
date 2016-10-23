@@ -4,7 +4,7 @@ namespace ArneGroskurth\Websocket\Client;
 
 use ArneGroskurth\Websocket\ConnectionInterface;
 use ArneGroskurth\Websocket\Message;
-use ArneGroskurth\Websocket\Response;
+use Zend\Http\Response;
 
 
 interface ClientConnectionInterface extends ConnectionInterface {

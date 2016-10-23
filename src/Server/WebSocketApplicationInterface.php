@@ -3,7 +3,7 @@
 namespace ArneGroskurth\Websocket\Server;
 
 use ArneGroskurth\Websocket\MessageInterface;
-use ArneGroskurth\Websocket\Request;
+use Zend\Http\Request;
 
 
 interface WebSocketApplicationInterface {

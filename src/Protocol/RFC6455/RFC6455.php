@@ -8,9 +8,10 @@ use ArneGroskurth\Websocket\ConnectionInterface;
 use ArneGroskurth\Websocket\WebsocketException;
 use ArneGroskurth\Websocket\Message;
 use ArneGroskurth\Websocket\Protocol\ProtocolInterface;
-use ArneGroskurth\Websocket\Request;
-use ArneGroskurth\Websocket\Response;
 use ArneGroskurth\Websocket\Server\ServerConnection;
+use Zend\Http\Headers;
+use Zend\Http\Request;
+use Zend\Http\Response;
 
 
 /**
@@ -54,12 +55,21 @@ class RFC6455 implements ProtocolInterface {
 
         $this->requestedKey = base64_encode($this->generateRandomKey());
 
-        $connection->write(Request::create('GET', $path, array_merge($additionalHeaders, array(
+
+        $headers = new Headers();
+        $headers->addHeaders(array_merge($additionalHeaders, array(
             'Upgrade' => 'websocket',
             'Connection' => 'Upgrade',
             'Sec-WebSocket-Version' => '13',
             'Sec-WebSocket-Key' => $this->requestedKey
-        ))));
+        )));
+
+        $request = new Request();
+        $request->setMethod('GET');
+        $request->setUri($path);
+        $request->setHeaders($headers);
+
+        $connection->write($request->toString());
     }
 
 
@@ -68,12 +78,12 @@ class RFC6455 implements ProtocolInterface {
      */
     public function handleResponse(AbstractConnection $connection, Response $response) {
 
-        if($response->getCode() !== 101) {
+        if($response->getStatusCode() !== 101) {
 
             throw new WebsocketException('Wrong http status code returned.');
         }
 
-        if($response->getHeader('Sec-WebSocket-Accept') !== $this->signKey($this->requestedKey)) {
+        if($response->getHeaders()->get('Sec-WebSocket-Accept')->getFieldValue() !== $this->signKey($this->requestedKey)) {
 
             throw new WebsocketException('Wrong key signature.');
         }
@@ -85,7 +95,9 @@ class RFC6455 implements ProtocolInterface {
      */
     public function canHandleRequest(Request $request) {
 
-        return $request->getHeader('Sec-WebSocket-Version') === '13';
+        $headers = $request->getHeaders();
+
+        return $headers->has('Sec-WebSocket-Version') && $headers->get('Sec-WebSocket-Version')->getFieldValue() === '13';
     }
 
 
@@ -99,11 +111,18 @@ class RFC6455 implements ProtocolInterface {
             throw new WebsocketException('Invalid upgrade request given.');
         }
 
-        $connection->write(Response::create(101, array(
+        $headers = new Headers();
+        $headers->addHeaders(array(
             'Upgrade' => 'websocket',
             'Connection' => 'Upgrade',
-            'Sec-WebSocket-Accept' => $this->signKey($request->getHeader('Sec-WebSocket-Key'))
-        )));
+            'Sec-WebSocket-Accept' => $this->signKey($request->getHeader('Sec-WebSocket-Key')->getFieldValue())
+        ));
+
+        $response = new Response();
+        $response->setStatusCode(101);
+        $response->setHeaders($headers);
+
+        $connection->write($response);
     }
 
 
@@ -275,18 +294,16 @@ class RFC6455 implements ProtocolInterface {
      */
     protected function validate(Request $request) {
 
+        $headers = $request->getHeaders();
+
         if($request->getMethod() !== 'GET') return false;
-        if((float)$request->getHttpVersion() < 1.1) return false;
-        if(!mb_check_encoding($request->getPath(), 'US-ASCII')) return false;
+        if((float)$request->getVersion() < 1.1) return false;
 
-        if(!$request->hasHeader('Connection')) return false;
-        if(strpos(strtolower($request->getHeader('Connection')), 'upgrade') === false) return false;
+        if(!$headers->has('Connection')) return false;
+        if(strpos(strtolower($request->getHeader('Connection')->getFieldValue()), 'upgrade') === false) return false;
 
-        if(!$request->hasHeader('Sec-WebSocket-Key')) return false;
-        if(mb_strlen(base64_decode($request->getHeader('Sec-WebSocket-Key')), '8bit') !== 16) return false;
-
-        if(!$request->hasHeader('Sec-WebSocket-Version')) return false;
-        if($request->getHeader('Sec-WebSocket-Version') !== '13') return false;
+        if(!$headers->has('Sec-WebSocket-Key')) return false;
+        if(mb_strlen(base64_decode($request->getHeader('Sec-WebSocket-Key')->getFieldValue()), '8bit') !== 16) return false;
 
         return true;
     }

@@ -3,8 +3,8 @@
 namespace ArneGroskurth\Websocket\Protocol;
 
 use ArneGroskurth\Websocket\AbstractConnection;
-use ArneGroskurth\Websocket\Request;
-use ArneGroskurth\Websocket\Response;
+use Zend\Http\Request;
+use Zend\Http\Response;
 
 
 /**

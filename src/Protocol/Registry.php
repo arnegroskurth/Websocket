@@ -2,7 +2,7 @@
 
 namespace ArneGroskurth\Websocket\Protocol;
 
-use ArneGroskurth\Websocket\Request;
+use Zend\Http\Request;
 
 
 /**

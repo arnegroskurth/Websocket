@@ -7,12 +7,12 @@ use ArneGroskurth\Websocket\ConnectionInterface;
 use ArneGroskurth\Websocket\WebsocketException;
 use ArneGroskurth\Websocket\Protocol\Registry;
 use ArneGroskurth\Websocket\Protocol\RFC6455\RFC6455;
-use ArneGroskurth\Websocket\Request;
-use ArneGroskurth\Websocket\Response;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Socket\ConnectionInterface as ReactConnectionInterface;
 use React\Socket\ServerInterface as ReactServerInterface;
+use Zend\Http\Request;
+use Zend\Http\Response;
 
 
 /**
@@ -195,13 +195,16 @@ class Server implements ServerInterface  {
         // http request header received
         elseif($connection->getState() === ConnectionInterface::STATE_CONNECTING) {
 
-            $request = Request::extractFromData($data);
+            $request = Request::fromString($data);
             $protocol = static::getProtocolRegistry()->findProtocol($request);
 
             // unsupported protocol
             if($protocol === null) {
 
-                $reactConnection->write(Response::create(400));
+                $response = new Response();
+                $response->setStatusCode(400);
+
+                $reactConnection->write($response);
                 $reactConnection->end();
 
                 return;
@@ -213,7 +216,10 @@ class Server implements ServerInterface  {
             }
             catch(WebsocketException $exception) {
 
-                $reactConnection->write(Response::create(400));
+                $response = new Response();
+                $response->setStatusCode(400);
+
+                $reactConnection->write($response);
                 $reactConnection->end();
 
                 return;

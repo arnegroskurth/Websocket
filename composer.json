@@ -15,7 +15,8 @@
     "ext-mbstring": "*",
     "ext-openssl": "*",
     "react/socket": "^0.4.3",
-    "arne-groskurth/url": "^1.0"
+    "arne-groskurth/url": "^1.0",
+    "zendframework/zend-http": "^2.5"
   },
   "autoload": {
     "psr-4": {

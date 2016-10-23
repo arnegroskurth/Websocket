@@ -4,9 +4,9 @@ namespace ArneGroskurth\Websocket\Client;
 
 use ArneGroskurth\Websocket\AbstractConnection;
 use ArneGroskurth\Websocket\ClosingMessage;
-use ArneGroskurth\Websocket\Response;
 use ArneGroskurth\Websocket\WebsocketException;
 use ArneGroskurth\Websocket\Protocol\RFC6455\RFC6455;
+use Zend\Http\Response;
 
 
 /**

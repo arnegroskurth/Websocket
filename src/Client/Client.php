@@ -7,7 +7,7 @@ use ArneGroskurth\Url\UrlException;
 use ArneGroskurth\Websocket\WebsocketException;
 use ArneGroskurth\Websocket\Protocol\Registry;
 use ArneGroskurth\Websocket\Protocol\RFC6455\RFC6455;
-use ArneGroskurth\Websocket\Response;
+use Zend\Http\Response;
 
 
 class Client implements ClientInterface {
@@ -166,7 +166,7 @@ class Client implements ClientInterface {
         $connection->setProtocol(static::getProtocolRegistry()->getProtocolByName($this->protocol));
         $connection->getProtocol()->request($connection, $path, $this->headers);
 
-        $response = Response::extractFromData($connection->receiveHttpHead());
+        $response = Response::fromString($connection->receiveHttpHead());
 
         $connection->getProtocol()->handleResponse($connection, $response);
 
