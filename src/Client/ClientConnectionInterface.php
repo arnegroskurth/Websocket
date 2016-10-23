@@ -4,6 +4,7 @@ namespace ArneGroskurth\Websocket\Client;
 
 use ArneGroskurth\Websocket\ConnectionInterface;
 use ArneGroskurth\Websocket\Message;
+use ArneGroskurth\Websocket\Response;
 
 
 interface ClientConnectionInterface extends ConnectionInterface {
@@ -28,4 +29,12 @@ interface ClientConnectionInterface extends ConnectionInterface {
      * @return bool
      */
     public function hasBufferedMessages();
+
+
+    /**
+     * Returns the http response received during initial handshake.
+     *
+     * @return Response
+     */
+    public function getHandshakeResponse();
 }

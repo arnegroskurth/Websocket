@@ -3,14 +3,16 @@
 namespace ArneGroskurth\Websocket\Server;
 
 use ArneGroskurth\Websocket\MessageInterface;
+use ArneGroskurth\Websocket\Request;
 
 
 interface WebSocketApplicationInterface {
 
     /**
      * @param ServerConnectionInterface $connection
+     * @param Request $handshakeRequest
      */
-    public function onOpen(ServerConnectionInterface $connection);
+    public function onOpen(ServerConnectionInterface $connection, Request $handshakeRequest);
 
 
     /**

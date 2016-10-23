@@ -222,7 +222,7 @@ class Server implements ServerInterface  {
             $connection->setProtocol($protocol);
             $connection->setState(ConnectionInterface::STATE_OPEN);
 
-            $this->application->onOpen($connection);
+            $this->application->onOpen($connection, $request);
         }
     }
 

@@ -3,9 +3,6 @@
 namespace ArneGroskurth\Websocket;
 
 
-/**
- * @internal
- */
 class Response {
 
     /**

@@ -4,6 +4,7 @@ namespace ArneGroskurth\Websocket\Client;
 
 use ArneGroskurth\Websocket\AbstractConnection;
 use ArneGroskurth\Websocket\ClosingMessage;
+use ArneGroskurth\Websocket\Response;
 use ArneGroskurth\Websocket\WebsocketException;
 use ArneGroskurth\Websocket\Protocol\RFC6455\RFC6455;
 
@@ -22,6 +23,11 @@ class ClientConnection extends AbstractConnection implements ClientConnectionInt
      * @var resource
      */
     protected $stream;
+
+    /**
+     * @var Response
+     */
+    protected $handshakeResponse;
 
     /**
      * @var \SplQueue
@@ -48,13 +54,22 @@ class ClientConnection extends AbstractConnection implements ClientConnectionInt
 
 
     /**
-     * @param resource $stream
+     * @return Response
+     */
+    public function getHandshakeResponse() {
+
+        return $this->handshakeResponse;
+    }
+
+
+    /**
+     * @param Response $handshakeResponse
      *
      * @return ClientConnection
      */
-    public function setStream($stream) {
+    public function setHandshakeResponse($handshakeResponse) {
 
-        $this->stream = $stream;
+        $this->handshakeResponse = $handshakeResponse;
 
         return $this;
     }

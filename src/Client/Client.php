@@ -161,6 +161,7 @@ class Client implements ClientInterface {
 
         stream_set_timeout($stream, $this->timeout);
 
+        // todo: detect reusage of persistent connection and skip handshake
         $connection = new ClientConnection($this, $stream);
         $connection->setProtocol(static::getProtocolRegistry()->getProtocolByName($this->protocol));
         $connection->getProtocol()->request($connection, $path);
@@ -168,6 +169,8 @@ class Client implements ClientInterface {
         $response = Response::extractFromData($connection->receiveHttpHead());
 
         $connection->getProtocol()->handleResponse($connection, $response);
+
+        $connection->setHandshakeResponse($response);
 
         $this->connection = $connection;
     }
