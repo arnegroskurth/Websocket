@@ -19,8 +19,9 @@ interface ProtocolInterface {
     /**
      * @param AbstractConnection $connection
      * @param string $path
+     * @param array $additionalHeaders
      */
-    public function request(AbstractConnection $connection, $path = '/');
+    public function request(AbstractConnection $connection, $path = '/', array $additionalHeaders = array());
 
 
     /**

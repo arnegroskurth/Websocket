@@ -50,16 +50,16 @@ class RFC6455 implements ProtocolInterface {
     /**
      * {@inheritdoc}
      */
-    public function request(AbstractConnection $connection, $path = '/') {
+    public function request(AbstractConnection $connection, $path = '/', array $additionalHeaders = array()) {
 
         $this->requestedKey = base64_encode($this->generateRandomKey());
 
-        $connection->write(Request::create('GET', $path, array(
+        $connection->write(Request::create('GET', $path, array_merge($additionalHeaders, array(
             'Upgrade' => 'websocket',
             'Connection' => 'Upgrade',
             'Sec-WebSocket-Version' => '13',
             'Sec-WebSocket-Key' => $this->requestedKey
-        )));
+        ))));
     }
 
 

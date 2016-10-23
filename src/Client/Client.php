@@ -164,7 +164,7 @@ class Client implements ClientInterface {
         // todo: detect reusage of persistent connection and skip handshake
         $connection = new ClientConnection($this, $stream);
         $connection->setProtocol(static::getProtocolRegistry()->getProtocolByName($this->protocol));
-        $connection->getProtocol()->request($connection, $path);
+        $connection->getProtocol()->request($connection, $path, $this->headers);
 
         $response = Response::extractFromData($connection->receiveHttpHead());
 
