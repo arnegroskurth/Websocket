@@ -1,0 +1,25 @@
+{
+  "name": "arne-groskurth/websocket",
+  "description": "Websocket is an event-based server implementing the RFC6455 protocol using ReactPHP and a synchronous client implementation.",
+  "keywords": ["websocket", "ws", "wss", "server", "client", "rfc6455"],
+  "homepage": "https://github.com/arnegroskurth/Websocket",
+  "authors": [
+    {
+      "name": "Arne Groskurth",
+      "email": "arne.groskurth@gears9.de"
+    }
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=5.4",
+    "ext-mbstring": "*",
+    "ext-openssl": "*",
+    "react/socket": "^0.4.3",
+    "arne-groskurth/url": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ArneGroskurth\\Websocket\\": "src/"
+    }
+  }
+}
