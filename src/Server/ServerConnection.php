@@ -22,6 +22,11 @@ class ServerConnection extends AbstractConnection implements ServerConnectionInt
      */
     protected $reactConnection;
 
+    /**
+     * @var string
+     */
+    protected $remoteAddress;
+
 
     /**
      * {@inheritdoc}
@@ -64,6 +69,9 @@ class ServerConnection extends AbstractConnection implements ServerConnectionInt
 
         $this->reactConnection = $reactConnection;
         $this->server = $server;
+
+        // caching prevents warning on calling when connection has gone away
+        $this->remoteAddress = $reactConnection->getRemoteAddress();
     }
 
 
@@ -72,7 +80,7 @@ class ServerConnection extends AbstractConnection implements ServerConnectionInt
      */
     public function getRemoteAddress() {
 
-        return $this->reactConnection->getRemoteAddress();
+        return $this->remoteAddress;
     }
 
 
