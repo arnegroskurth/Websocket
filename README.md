@@ -1,5 +1,7 @@
 # Websocket
 
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 Websocket is an event-based server implementing the [RFC6455](https://tools.ietf.org/html/rfc6455) protocol using [ReactPHP](https://github.com/reactphp/react) and a synchronous client implementation.
 
 ## License
